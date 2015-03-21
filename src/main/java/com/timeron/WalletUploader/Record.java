@@ -10,7 +10,7 @@ public class Record extends Operation{
 	
 	static Logger log = Logger.getLogger(Record.class.getName());
 	
-	public void addOperation(String account, String type, String date, String price) {
+	public WalletRecord addOperation(String account, String type, String date, String price) {
 		WalletRecord walletRecord = new WalletRecord();
 		
 		boolean income = false;
@@ -29,7 +29,9 @@ public class Record extends Operation{
 		walletRecord.setIncome(income);
 		
 		log.info(account+" - "+type+" - "+addDate(date)+" - "+value+" inc "+income);
-		walletRecordDAO.save(walletRecord);
+		
+		return walletRecord;
+		
 	}
 	
 

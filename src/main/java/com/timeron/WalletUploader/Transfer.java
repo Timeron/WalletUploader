@@ -11,28 +11,26 @@ public class Transfer extends Operation{
 
 	static Logger log = Logger.getLogger(Transfer.class.getName());
 	
-	public void addTransfer(String type, String destynation, String date, String price) {
+	public WalletRecord addTransfer(String type, String source, String destynation, String date, String price) {
 		
 		WalletRecord walletRecord = new WalletRecord();
-		String[] accounts;
-		String separator = " → ";
 		
 		float value = Float.parseFloat(price.replaceAll(",", ""));
 		
-		accounts = destynation.split(separator);
-		WalletAccount walletAccountSource = addWalletAccount(accounts[0]);
-		WalletAccount walletAccountDestination = addWalletAccount(accounts[1]);
+		WalletAccount walletAccountSource = addWalletAccount(source);
+		WalletAccount walletAccountDestination = addWalletAccount(destynation);
 		
-		walletRecord.setDate(new Date());
+		walletRecord.setDate(addDate(date));
 		walletRecord.setWalletAccount(walletAccountSource);
+		walletRecord.setSourceWalletAccount(walletAccountSource);
 		walletRecord.setDestinationWalletAccount(walletAccountDestination);
 		walletRecord.setTransfer(true);
 		walletRecord.setUpdated(new Date());
+		if(value < 0){value *= -1;}
 		walletRecord.setValue(value);
 		
-		walletRecordDAO.save(walletRecord);
-		
-		log.info("Transfer: "+walletAccountSource.getName()+separator+walletAccountDestination.getName());
+		log.info("Transfer: "+walletAccountSource.getName()+ " -> " +walletAccountDestination.getName());
+		return walletRecord;
 	}
 
 }
